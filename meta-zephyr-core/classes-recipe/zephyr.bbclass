@@ -14,6 +14,7 @@ TERMINFO = "${STAGING_DATADIR_NATIVE}/terminfo"
 KCONFIG_CONFIG_COMMAND ??= "menuconfig"
 KCONFIG_CONFIG_ROOTDIR ??= "${B}"
 ZEPHYR_BOARD ?= "${MACHINE}"
+ZEPHYR_SNIPPETS ?= ""
 
 # qemuboot writes into IMGDEPLOYDIR, force to write to DEPLOY_DIR_IMAGE
 IMGDEPLOYDIR = "${DEPLOY_DIR_IMAGE}"
@@ -27,6 +28,7 @@ python () {
 }
 
 EXTRA_OECMAKE:append = " -DZEPHYR_MODULES=${ZEPHYR_MODULES}"
+EXTRA_OECMAKE:append = "${@' -DSNIPPET=%s' % d.getVar('ZEPHYR_SNIPPETS') if d.getVar('ZEPHYR_SNIPPETS') else ''}"
 
 python do_menuconfig() {
     import shutil
